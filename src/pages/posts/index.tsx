@@ -8,7 +8,18 @@ import { getPrismicClient } from "../../services/prismic";
 
 import styles from "./styles.module.scss";
 
-export default function Posts() {
+interface Post {
+  slug: string;
+  title: string;
+  excerpt: string;
+  updatedAt: string;
+}
+
+interface PostsProps {
+  posts: Post[]
+}
+
+export default function Posts({ posts }: PostsProps) {
   return (
     <>
       <Head>
@@ -17,11 +28,15 @@ export default function Posts() {
 
       <main className={styles.container}>
         <div className={styles.posts}>
-          <a href="#">
-            <time>12 de março de 2021</time>
-            <strong>Creating a Monorepo with Lerna & Yarn</strong>
-            <p>Creating a Monorepo with Lerna & Yarn a Monorepo with Lerna & Yarn a Monorepo with Lerna & Yarn a Monorepo with Lerna & Yarn a Monorepo with Lerna & Yarn</p>
-          </a>
+          {
+            posts.map(post => (
+              <a key={post.slug} href="#">
+                <time>{post.updatedAt}</time>
+                <strong>{post.title}</strong>
+                <p>{post.excerpt}</p>
+              </a>
+            ))
+          }
         </div>
       </main>
     </>
@@ -54,6 +69,8 @@ export const getStaticProps: GetStaticProps = async () => {
   console.log(response)
 
   return {
-    props: {}
+    props: {
+      posts
+    }
   }
 };
